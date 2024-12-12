@@ -1,0 +1,56 @@
+/* Container for the marquee */
+.marquee-modern-container {
+    overflow: hidden;
+    width: 100%;
+    background-color: #000;
+    /* Black background for a modern feel */
+    display: flex;
+    align-items: center;
+    height: 100px;
+    position: relative;
+}
+
+/* Marquee animation */
+.marquee-modern {
+    display: flex;
+    white-space: nowrap;
+    animation: scroll-marquee 10s linear infinite;
+    align-items: center;
+}
+
+/* Keyframe animation for smooth scrolling */
+@keyframes scroll-marquee {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Styling the marquee items */
+.marquee-item {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    margin-right: 30px;
+}
+
+/* Styling the arrows */
+.arrow-icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 20px;
+    transition: transform 0.3s ease;
+}
+
+/* Add rotation for different directions */
+.arrow-icon.right {
+    transform: rotate(0deg);
+}
+
+.arrow-icon.left {
+    transform: rotate(180deg);
+}
