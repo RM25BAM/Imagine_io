@@ -1,0 +1,33 @@
+/* Drag and drop section styling */
+.dragdrop-section {
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+/* Dropzone container */
+.dragdrop-container {
+    border: 2px dashed #cccccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #ffffff;
+    transition: border-color 0.3s ease;
+}
+
+.dragdrop-container:hover {
+    border-color: #888888;
+}
+
+.uploaded-preview {
+    margin-top: 20px;
+}
+
+.uploaded-preview img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+}

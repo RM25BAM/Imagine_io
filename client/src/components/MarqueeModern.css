@@ -14,7 +14,7 @@
 .marquee-modern {
     display: flex;
     white-space: nowrap;
-    animation: scroll-marquee 10s linear infinite;
+    animation: scroll-marquee 20s linear infinite;
     align-items: center;
 }
 

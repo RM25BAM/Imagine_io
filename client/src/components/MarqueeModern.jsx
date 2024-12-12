@@ -22,6 +22,8 @@ const MarqueeModern = () => {
                 <ArrowIcon direction={arrowDirection} />
                 <span className="marquee-item">MODERN CREATIVE STUDIO</span>
                 <ArrowIcon direction={arrowDirection} />
+                <span className="marquee-item">MODERN CREATIVE STUDIO</span>
+                <ArrowIcon direction={arrowDirection} />
             </div>
         </div>
     );
