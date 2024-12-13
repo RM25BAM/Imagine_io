@@ -1,0 +1,7 @@
+numpy
+flask 
+flask-restful 
+flask-cors 
+opencv-python 
+numpy 
+scipy

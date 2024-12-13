@@ -1,20 +1,10 @@
 from flask import Flask, request, send_file
 import numpy as np
 import cv2
-from scipy.signal import convolve2d
 from scipy.fft import fft2, ifft2, fftshift, ifftshift
 import os
+from flask_restful import Resource, Api
 from flask_cors import CORS
-app = Flask(__name__)
-CORS(app)
-
-app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-RESULT_FOLDER = 'results'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(RESULT_FOLDER, exist_ok=True)
-print(f"Saved file at: {filepath}")
-
 
 # Helper functions for processing
 def gaussian_notch_filter(shape, u, v, D0):
@@ -57,41 +47,53 @@ def wiener_filter(blurred_image, psf, noise_variance, alpha):
     restored_image = np.abs(ifft2(F_hat))
     return restored_image
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    # Save the uploaded file
-    file = request.files.get('file')
-    process_type = request.form.get('process_type')
+class ImageUpload(Resource):
+    def post(self):
+        # Ensure upload folder exists
+        UPLOAD_FOLDER = 'uploads'
+        RESULT_FOLDER = 'results'
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        os.makedirs(RESULT_FOLDER, exist_ok=True)
 
-    if not file or not process_type:
-        return "Invalid input", 400
+        # Save the uploaded file
+        file = request.files.get('file')
+        process_type = request.form.get('process_type')
 
-    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(filepath)
+        if not file or not process_type:
+            return {"message": "Invalid input"}, 400
 
-    image = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE).astype(np.float32)
-    if process_type == 'periodic':
-        result_image = detect_and_filter_peaks(image)
-    elif process_type == 'wiener':
-        psf = np.ones((5, 5)) / 25
-        noise_variance = 0.01
-        result_image = wiener_filter(image, psf, noise_variance, alpha=0.01)
-    else:
-        return "Invalid process type", 400
+        filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+        file.save(filepath)
+        print(f"Saved file at: {filepath}")
 
-    # Save the processed image in a compatible format
-    result_path = os.path.join(RESULT_FOLDER, 'processed_image.png')
-    cv2.imwrite(result_path, result_image)
+        # Read and process image
+        image = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+        
+        # Process image based on type
+        if process_type == 'periodic':
+            result_image = detect_and_filter_peaks(image)
+        elif process_type == 'wiener':
+            psf = np.ones((5, 5)) / 25
+            noise_variance = 0.01
+            result_image = wiener_filter(image, psf, noise_variance, alpha=0.01)
+        else:
+            return {"message": "Invalid process type"}
 
-    # Return the processed image with the correct MIME type
-    return send_file(result_path, mimetype='image/png')
+        # Save processed image
+        result_path = os.path.join(RESULT_FOLDER, 'processed_image.png')
+        cv2.imwrite(result_path, result_image)
 
+        # Return processed image
+        return send_file(result_path, mimetype='image/png')
 
+# Flask app setup
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
+api = Api(app)
+api.add_resource(ImageUpload, '/upload')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
 
 """ from flask import Flask, request, render_template, send_file
 import numpy as np
