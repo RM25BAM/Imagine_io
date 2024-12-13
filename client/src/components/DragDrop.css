@@ -1,33 +1,161 @@
-/* Drag and drop section styling */
+/* Main DragDrop Section */
 .dragdrop-section {
     margin: 50px auto;
     padding: 20px;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: transparent;
+    width: 100%;
+    border-radius: 10px;
 }
 
-/* Dropzone container */
-.dragdrop-container {
-    border: 2px dashed #cccccc;
+/* Header */
+.dragdrop-header h1 {
+    font-size: 3rem;
+    color: #333;
+    font-weight: 800;
+    font-family: 'Roboto', sans-serif;
+}
+
+.dragdrop-header p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 25px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Content Area */
+.dragdrop-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Option Toggle Section */
+.option-toggle {
+    flex: 1;
+    text-align: left;
+    background-color: transparent;
+    border-radius: 10px;
     padding: 20px;
-    text-align: center;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.toggle-button {
+    background-color: #FF6666;
+    color: #FFF;
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-family: 'Roboto', sans-serif;
+    border: 2px solid #FF6666;
+    border-radius: 25px;
     cursor: pointer;
-    background-color: #ffffff;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
 }
 
-.dragdrop-container:hover {
-    border-color: #888888;
+.toggle-button:hover {
+    background-color: #FF0000;
+    color: #fff;
 }
 
-.uploaded-preview {
+.toggle-button.active {
+    background-color: #FF0000;
+    color: #fff;
+}
+
+.toggle-description {
     margin-top: 20px;
+    font-size: 1.5rem;
+    color: #444;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.8;
 }
 
-.uploaded-preview img {
+/* Image Containers */
+.image-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.image-preview {
+    flex: 1;
+    border-radius: 10px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    padding: 15px;
+}
+
+.image-preview h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+.image-preview img {
     max-width: 100%;
-    height: auto;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #fff;
+    max-height: 100%;
+    border-radius: 10px;
+}
+
+.placeholder {
+    text-align: center;
+    color: #aaa;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.upload-area {
+    flex: 1;
+    border: 2px dashed #cccccc;
+    border-radius: 10px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #F2F2F2;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.upload-area:hover {
+    border-color: #333;
+}
+
+.upload-area p {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-family: 'Arial', sans-serif;
+}
+
+.upload-button {
+    background: linear-gradient(90deg, #FF0000, #FF6666);
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-button:hover {
+    background: linear-gradient(90deg, #FF6666, #FF9999);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }

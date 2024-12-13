@@ -1,0 +1,72 @@
+/* Preloader container */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #333333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: translateX(120%) scale(1.1);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.carousel-slide-0 {
+    opacity: 1;
+    transform: translateX(0%) scale(1);
+}
+
+.carousel-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Oswald', sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+    color: #ffd32c;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    z-index: 10;
+    animation: textGlow 1.5s ease-in-out infinite;
+}
+
+
+
+@keyframes textGlow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 5px #ffd32c, 0 0 10px #ffaa00, 0 0 20px #ffaa00;
+    }
+
+    50% {
+        text-shadow: 0 0 10px #ffd32c, 0 0 25px #ffaa00, 0 0 30px #ffaa00;
+    }
+}
