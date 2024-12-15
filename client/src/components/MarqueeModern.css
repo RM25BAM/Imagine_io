@@ -25,12 +25,17 @@
     }
 }
 
+.marquee-item-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+}
+
 .marquee-item {
     font-size: 2rem;
     font-weight: bold;
     text-transform: uppercase;
     color: white;
-    margin-right: 30px;
 }
 
 .arrow-icon {
