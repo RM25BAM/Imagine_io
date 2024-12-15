@@ -1,4 +1,3 @@
-/* Main DragDrop Section */
 .dragdrop-section {
     margin: 50px auto;
     padding: 20px;
@@ -6,9 +5,10 @@
     background-color: transparent;
     width: 100%;
     border-radius: 10px;
+    height: auto;
+
 }
 
-/* Header */
 .dragdrop-header h1 {
     font-size: 3rem;
     color: #333;
@@ -23,7 +23,6 @@
     font-family: 'Arial', sans-serif;
 }
 
-/* Content Area */
 .dragdrop-content {
     display: flex;
     justify-content: space-between;
@@ -31,7 +30,7 @@
     gap: 20px;
 }
 
-/* Option Toggle Section */
+
 .option-toggle {
     flex: 1;
     text-align: left;
@@ -47,7 +46,7 @@
 .toggle-button {
     background-color: #FF6666;
     color: #FFF;
-    padding: 15px 25px;
+    padding: 15px 15px;
     font-size: 1.2rem;
     font-family: 'Roboto', sans-serif;
     border: 2px solid #FF6666;
@@ -55,6 +54,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 .toggle-button:hover {
@@ -75,12 +75,13 @@
     line-height: 1.8;
 }
 
-/* Image Containers */
+
 .image-container {
     display: flex;
     justify-content: space-between;
     gap: 20px;
     margin-top: 30px;
+    margin-top: 80px;
 }
 
 .image-preview {
@@ -129,10 +130,8 @@
     text-align: center;
     transition: border-color 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
+    margin-bottom: 20px;
 
-.upload-area:hover {
-    border-color: #333;
 }
 
 .upload-area p {
@@ -143,6 +142,12 @@
 }
 
 .upload-button {
+    display: block;
+
+    margin-top: 20px;
+
+    margin-left: auto;
+    margin-right: auto;
     background: linear-gradient(90deg, #FF0000, #FF6666);
     color: #fff;
     padding: 15px 30px;
@@ -152,10 +157,150 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: 1000;
 }
+
+
 
 .upload-button:hover {
     background: linear-gradient(90deg, #FF6666, #FF9999);
-    transform: translateY(-3px);
+
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.alpha-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: transparent;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 350px;
+    transition: all 0.3s ease;
+}
+
+.alpha-input:hover {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.alpha-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    flex-shrink: 0;
+    text-align: right;
+    width: 80px;
+}
+
+.alpha-input-field {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #333;
+    background-color: #fafafa;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.alpha-input-field:focus {
+    outline: none;
+    border-color: #ccc;
+    background-color: #ffffff;
+}
+
+.alpha-input-field::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.periodic-inputs {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+
+    margin-top: 15px;
+
+    width: 100%;
+}
+
+.periodic-inputs label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.periodic-inputs input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.periodic-inputs input:focus {
+    outline: none;
+    border-color: #ccc;
+    background-color: #ffffff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.metrics-container {
+    margin-top: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.metrics {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+
+    border: 2px solid #e0e0e0;
+
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    text-align: center;
+
+    max-width: 400px;
+
+    font-family: 'Roboto', sans-serif;
+
+}
+
+.metrics p {
+    margin: 0;
+
+    font-size: 1.2rem;
+
+    color: #333;
+
+    line-height: 1.6;
+
+}
+
+.metrics p strong {
+    color: #ff6666;
+
+    font-weight: bold;
+
 }

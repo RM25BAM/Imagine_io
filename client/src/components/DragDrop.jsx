@@ -4,34 +4,49 @@ import { gsap } from "gsap";
 import "./DragDrop.css";
 
 const DragDrop = () => {
-    const [uploadedFile, setUploadedFile] = useState(null); // To store the uploaded raw file
-    const [selectedOption, setSelectedOption] = useState("option1"); // Default to Wiener Filter
-    const [processedFile, setProcessedFile] = useState(null); // To store the processed result
+    const [uploadedFile, setUploadedFile] = useState(null);
+    const [selectedOption, setSelectedOption] = useState("option1");
+    const [processedFile, setProcessedFile] = useState(null);
+    const [alpha, setAlpha] = useState(0.01);
+    const [D0, setD0] = useState(10);
+    const [B, setB] = useState(0.5);
+    const [n, setN] = useState(10);
+    const [T, setT] = useState(3);
+    const [psnr, setPsnr] = useState(null);
+    const [rmse, setRmse] = useState(null);
+    const [bsnr, setBsnr] = useState(null);
+    const [isnr, setIsnr] = useState(null);
 
     const onDrop = useCallback((acceptedFiles) => {
         if (acceptedFiles.length > 0) {
             const file = acceptedFiles[0];
-            setUploadedFile(file); // Store the raw file for upload
-            setProcessedFile(null); // Clear previous results
-            console.log("File uploaded:", file);
+            setUploadedFile(file);
+            setProcessedFile(null);
+            setPsnr(null);
+            setRmse(null);
+            setBsnr(null);
+            setIsnr(null);
         }
     }, []);
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        accept: { "image/*": [".jpg", ".jpeg", ".tif", ".tiff"] }, // Allow TIF and JPG
+        accept: { "image/*": [".jpg", ".jpeg", ".tif", ".tiff", ".png"] },
         multiple: false,
     });
 
     const handleOptionSwitch = () => {
         const tl = gsap.timeline();
-
         tl.to(".toggle-description", { opacity: 0, y: -10, duration: 0.3 })
             .to(".upload-area", { opacity: 0, scale: 0.95, duration: 0.3 }, "-=0.3")
             .add(() => {
                 setSelectedOption(selectedOption === "option1" ? "option2" : "option1");
                 setUploadedFile(null);
                 setProcessedFile(null);
+                setPsnr(null);
+                setRmse(null);
+                setBsnr(null);
+                setIsnr(null);
             })
             .to(".toggle-description", { opacity: 1, y: 0, duration: 0.3 })
             .to(".upload-area", { opacity: 1, scale: 1, duration: 0.3 }, "-=0.3");
@@ -50,19 +65,37 @@ const DragDrop = () => {
             selectedOption === "option1" ? "wiener" : "periodic"
         );
 
+        if (selectedOption === "option1") {
+            formData.append("alpha", alpha);
+        } else if (selectedOption === "option2") {
+            formData.append("D0", D0);
+            formData.append("B", B);
+            formData.append("n", n);
+            formData.append("T", T);
+        }
+
         try {
-            const response = await fetch("http://127.0.0.1:5000/upload", {
+            const response = await fetch("http://127.0.0.1:8000/upload", {
                 method: "POST",
                 body: formData,
             });
 
-            if (!response.ok) {
-                throw new Error("Error processing image");
+            const json = await response.json();
+
+            if (json.processed_image) {
+                const processedImageURL = `data:image/png;base64,${json.processed_image}`;
+                setProcessedFile(processedImageURL);
             }
 
-            const blob = await response.blob();
-            const url = URL.createObjectURL(blob);
-            setProcessedFile(url); // Display the processed image
+            if (json.psnr !== undefined && json.rmse !== undefined) {
+                setPsnr(json.psnr);
+                setRmse(json.rmse);
+            }
+
+            if (json.bsnr !== undefined && json.isnr !== undefined) {
+                setBsnr(json.bsnr);
+                setIsnr(json.isnr);
+            }
         } catch (error) {
             console.error("Processing error:", error);
             alert("An error occurred while processing the image.");
@@ -85,33 +118,102 @@ const DragDrop = () => {
                             ? "Wiener Filter: Restore blurred images using advanced techniques."
                             : "Periodic Noise Filtering: Detect and remove unwanted periodic noise in images."}
                     </div>
-                    <button
-                        className={`toggle-button ${selectedOption === "option1" ? "active" : ""}`}
-                        onClick={handleOptionSwitch}
-                    >
+                    {selectedOption === "option1" && (
+                        <div className="alpha-input">
+                            <label htmlFor="alpha" className="alpha-label">
+                                Alpha:
+                            </label>
+                            <input
+                                type="number"
+                                id="alpha"
+                                value={alpha}
+                                onChange={(e) => setAlpha(e.target.value)}
+                                placeholder="Enter alpha value"
+                            />
+                        </div>
+                    )}
+                    {selectedOption === "option2" && (
+                        <div className="periodic-inputs">
+                            <label>
+                                D0:
+                                <input
+                                    type="number"
+                                    value={D0}
+                                    onChange={(e) => setD0(e.target.value)}
+                                />
+                            </label>
+                            <label>
+                                B:
+                                <input
+                                    type="number"
+                                    value={B}
+                                    onChange={(e) => setB(e.target.value)}
+                                />
+                            </label>
+                            <label>
+                                n:
+                                <input
+                                    type="number"
+                                    value={n}
+                                    onChange={(e) => setN(e.target.value)}
+                                />
+                            </label>
+                            <label>
+                                T:
+                                <input
+                                    type="number"
+                                    value={T}
+                                    onChange={(e) => setT(e.target.value)}
+                                />
+                            </label>
+                        </div>
+                    )}
+                    <button className="toggle-button" onClick={handleOptionSwitch}>
                         {selectedOption === "option1" ? "Periodic Noise Filtering" : "Wiener Filtering"}
                     </button>
                 </div>
                 <div className="upload-area" {...getRootProps()}>
                     <input {...getInputProps()} />
                     <p>Drag image here or click to upload</p>
-                    <button className="upload-button" onClick={handleProcessImage}>
-                        {selectedOption === "option1"
-                            ? "Restore Blurred Image"
-                            : "Apply Periodic Noise Filtering"}
+                    <button
+                        className="upload-button"
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent click event from propagating to the drag-and-drop container
+                            handleProcessImage(); // Call the actual process function
+                        }}
+                    >
+                        Process Image
                     </button>
                 </div>
             </div>
-
-            {processedFile && ( // Show images only if processed file is available
+            {uploadedFile && (
                 <div className="image-container">
-                    <div className="image-preview before">
+                    <div className="image-preview">
                         <h3>Before</h3>
-                        <img src={URL.createObjectURL(uploadedFile)} alt="Uploaded Preview" />
+                        <img src={URL.createObjectURL(uploadedFile)} alt="Before" />
                     </div>
-                    <div className="image-preview after">
-                        <h3>Final Result</h3>
-                        <img src={processedFile} alt="Processed Result" />
+                    {processedFile && (
+                        <div className="image-preview">
+                            <h3>After</h3>
+                            <img src={processedFile} alt="After" />
+                        </div>
+                    )}
+                </div>
+            )}
+            {processedFile && (
+                <div className="metrics-container">
+                    <div className="metrics">
+                        <p>
+                            <strong>PSNR:</strong> {psnr !== null ? `${psnr.toFixed(2)} dB` : "N/A"} <br />
+                            <strong>RMSE:</strong> {rmse !== null ? `${rmse.toFixed(2)}` : "N/A"} <br />
+
+                            {selectedOption === "option1" && (
+                                <>
+                                    <strong>BSNR:</strong> {bsnr !== null ? `${bsnr.toFixed(2)} dB` : "N/A"} <br />
+                                    <strong>ISNR:</strong> {isnr !== null ? `${isnr.toFixed(2)} dB` : "N/A"} <br />
+                                </>
+                            )}
+                        </p>
                     </div>
                 </div>
             )}
@@ -121,66 +223,3 @@ const DragDrop = () => {
 
 export default DragDrop;
 
-
-
-
-
-
-
-
-
-// import React, { useState, useCallback } from "react";
-// import { useDropzone } from "react-dropzone";
-// import "./DragDrop.css";
-
-// const DragDrop = () => {
-//     const [uploadedFile, setUploadedFile] = useState(null);
-
-//     const onDrop = useCallback((acceptedFiles) => {
-//         if (acceptedFiles.length > 0) {
-//             const file = acceptedFiles[0];
-//             setUploadedFile(URL.createObjectURL(file));
-//             console.log("File uploaded:", file);
-//         }
-//     }, []);
-
-//     const { getRootProps, getInputProps } = useDropzone({
-//         onDrop,
-//         accept: { "image/*": [] },
-//         multiple: false,
-//     });
-
-//     return (
-//         <section className="dragdrop-section">
-//             <div className="dragdrop-header">
-//                 <h1>Photo Enhancer AI: Upscale Image Quality & Resolution</h1>
-//                 <p>
-//                     Enhance photos effortlessly with AI photo enhancer. Increase image resolution,
-//                     improve colors, and make photos clear online for free with just a click!
-//                 </p>
-//             </div>
-//             <div className="dragdrop-content">
-//                 {/* Left side: Image preview or placeholder */}
-//                 <div className="image-preview">
-//                     {uploadedFile ? (
-//                         <img src={uploadedFile} alt="Uploaded Preview" />
-//                     ) : (
-//                         <div className="placeholder">
-//                             <p>Before</p>
-//                             <p className="upload-placeholder">Image will appear here after upload</p>
-//                         </div>
-//                     )}
-//                 </div>
-
-//                 {/* Right side: Drag and Drop or Upload */}
-//                 <div className="upload-area" {...getRootProps()}>
-//                     <input {...getInputProps()} />
-//                     <p>Drag image here or click to upload</p>
-//                     <button className="upload-button">Enhance Photo Now</button>
-//                 </div>
-//             </div>
-//         </section>
-//     );
-// };
-
-// export default DragDrop;

@@ -118,7 +118,6 @@ section {
   transition: border-color 0.3s ease;
   max-width: 400px;
   margin: 0 auto;
-  /* Center container */
 }
 
 .DragDrop .dragdrop-container:hover {

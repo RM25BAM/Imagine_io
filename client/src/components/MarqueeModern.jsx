@@ -6,11 +6,10 @@ const MarqueeModern = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            // Toggle arrow direction between right and left
             setArrowDirection((prevDirection) =>
                 prevDirection === "right" ? "left" : "right"
             );
-        }, 5000); // Change direction every 5 seconds (adjust timing as needed)
+        }, 5000);
 
         return () => clearInterval(interval);
     }, []);
@@ -20,16 +19,25 @@ const MarqueeModern = () => {
             <div className={`marquee-modern ${arrowDirection}`}>
                 <span className="marquee-item">MODERN CREATIVE STUDIO</span>
                 <ArrowIcon direction={arrowDirection} />
-                <span className="marquee-item">MODERN CREATIVE STUDIO</span>
+                <span className="marquee-item">IMAGINE.IO</span>
                 <ArrowIcon direction={arrowDirection} />
                 <span className="marquee-item">MODERN CREATIVE STUDIO</span>
                 <ArrowIcon direction={arrowDirection} />
+                <span className="marquee-item">IMAGINE.IO</span>
+                <ArrowIcon direction={arrowDirection} />
+                <span className="marquee-item">MODERN CREATIVE STUDIO</span>
+                <ArrowIcon direction={arrowDirection} />
+                <span className="marquee-item">IMAGINE.IO</span>
+                <ArrowIcon direction={arrowDirection} />
+                <span className="marquee-item">MODERN CREATIVE STUDIO</span>
+                <ArrowIcon direction={arrowDirection} />
+                <span className="marquee-item">IMAGINE.IO</span>
             </div>
         </div>
     );
 };
 
-// Arrow Icon Component
+
 const ArrowIcon = ({ direction }) => {
     return (
         <svg
